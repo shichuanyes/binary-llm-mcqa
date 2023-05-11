@@ -2,7 +2,7 @@ from typing import List
 
 import openai
 
-from method import Method
+from method.method import Method
 from question import Question
 from utils import idx_to_letter, letter_to_idx
 

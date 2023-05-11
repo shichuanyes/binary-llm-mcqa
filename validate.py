@@ -5,10 +5,14 @@ import openai
 from tqdm import tqdm
 
 from api_key import api_key
-from cosmos_qa import CosmosQA
-from dataset import Dataset
-from models import curie_finetune
-from natural_method import NaturalMethod
+from dataset.cosmos_qa import CosmosQA
+from dataset.dataset import Dataset
+from dataset.hellaswag import Hellaswag
+from dataset.race import Race
+from method.binary_method import BinaryMethod
+from models import curie_finetune_hellaswag, curie_finetune_cosmos_qa_binary, curie_finetune_race_binary, \
+    curie_finetune_hellaswag_binary
+from method.natural_method import NaturalMethod
 
 
 def evaluate(dataset: Dataset, predict: Callable) -> Tuple[float, List[int]]:
@@ -26,9 +30,11 @@ def evaluate(dataset: Dataset, predict: Callable) -> Tuple[float, List[int]]:
 
 
 if __name__ == '__main__':
-    cosmos_qa_val = CosmosQA(split='validation')
+    # val = CosmosQA(split='validation')
+    # val = Race('middle', split='validation')
+    val = Hellaswag(split='validation')
     openai.api_key = api_key
-    accuracy, answers = evaluate(cosmos_qa_val, lambda question: NaturalMethod.ask(question, model=curie_finetune))
+    accuracy, answers = evaluate(val, lambda question: BinaryMethod.ask(question, model=curie_finetune_hellaswag_binary))
 
-    np.savetxt('cosmos_qa_result_naive.txt', X=np.array(answers))
+    np.savetxt('hellaswag_result_curie_binary.txt', X=np.array(answers))
     print(f'accuracy={accuracy}')

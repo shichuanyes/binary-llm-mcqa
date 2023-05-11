@@ -3,11 +3,13 @@ from typing import List, Dict, Type
 
 from tqdm import tqdm
 
-from cosmos_qa import CosmosQA
-from dataset import Dataset
-from method import Method
-from natural_method import NaturalMethod
-from race import Race
+from dataset.cosmos_qa import CosmosQA
+from dataset.dataset import Dataset
+from dataset.hellaswag import Hellaswag
+from dataset.race import Race
+from method.binary_method import BinaryMethod
+from method.method import Method
+from method.natural_method import NaturalMethod
 
 
 def get_ft_jsonl(dataset: Dataset, method: Type[Method]) -> List[Dict[str, str]]:
@@ -20,12 +22,12 @@ def get_ft_jsonl(dataset: Dataset, method: Type[Method]) -> List[Dict[str, str]]
 
 
 if __name__ == '__main__':
-    # cosmos_qa = CosmosQA(split='train')
-    race = Race('middle', split='train')
+    # data = CosmosQA(split='train')
+    # data = Race('middle', split='train')
+    data = Hellaswag(split='train')
     print("Generated finetune data")
-    # ft = get_ft_jsonl(cosmos_qa, NaturalMethod)
-    ft = get_ft_jsonl(race, NaturalMethod)
-    with open('race.jsonl', 'w') as file:
+    ft = get_ft_jsonl(data, BinaryMethod)
+    with open('hellaswag_binary.jsonl', 'w') as file:
         for entry in ft:
             json.dump(entry, file)
             file.write('\n')
