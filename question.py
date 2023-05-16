@@ -29,21 +29,3 @@ class Question:
 
     def get_parts_str(self) -> str:
         return "\n".join([str(part) for part in self.parts])
-
-    def get_natural_prompt(self) -> str:
-        prompt = f"self.get_parts_str()\n"
-        for i, choice in enumerate(self.choices):
-            prompt += f"{idx_to_letter(i)}. {choice}\n"
-        prompt += "Answer:"
-        return prompt
-
-    def get_binary_prompts(self) -> List[str]:
-        prompts = []
-        for choice in self.choices:
-            prompt = f"self.get_parts_str()\n" \
-                     f"Answer: {choice}\n" \
-                     f"Correct:"
-            prompts.append(prompt)
-        return prompts
-
-
